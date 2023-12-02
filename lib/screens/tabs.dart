@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:meals/models/meal.dart';
 import 'package:meals/screens/categories.dart';
+import 'package:meals/screens/filters.dart';
 import 'package:meals/screens/meals.dart';
 import 'package:meals/widgets/main_drawer.dart';
 
@@ -71,13 +72,21 @@ class _TabsScreen extends State<TabsScreen> {
       // }
     });
   }
-  void _setScreen(String identifier){
-    if(identifier=='filters'){
 
-    }else{
+  void _setScreen(String identifier) {
+
+    Navigator.of(context).pop();//this line added here to clode the drawer after exiting the filterScreen, now you can delete the else statment.
+    if (identifier == 'filters') {
+      Navigator.of(context).pushReplacement(//pushReplacement used to replace the screen in the widgets stuck instude of push widget over widget.
+        MaterialPageRoute(
+          builder: (ctx) => const FiltersScreen(),
+        ),
+      );
+    } /*else {
       Navigator.of(context).pop();
-    }
+    }*/
   }
+
   @override
   Widget build(BuildContext context) {
     Widget activeScreen = CategoriesScreen(
@@ -96,7 +105,9 @@ class _TabsScreen extends State<TabsScreen> {
       appBar: AppBar(
         title: Text(activePageTitle),
       ),
-        drawer:  MainDrawer(onSelectScreen: _setScreen,),
+      drawer: MainDrawer(
+        onSelectScreen: _setScreen,
+      ),
       body: activeScreen,
       bottomNavigationBar: BottomNavigationBar(
         onTap: _selectedPage,
