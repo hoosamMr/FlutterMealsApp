@@ -77,7 +77,7 @@ class _TabsScreen extends State<TabsScreen> {
 
     Navigator.of(context).pop();//this line added here to clode the drawer after exiting the filterScreen, now you can delete the else statment.
     if (identifier == 'filters') {
-      Navigator.of(context).pushReplacement(//pushReplacement used to replace the screen in the widgets stuck instude of push widget over widget.
+      Navigator.of(context).push(//pushReplacement used to replace the screen in the widgets stuck instude of push widget over widget.
         MaterialPageRoute(
           builder: (ctx) => const FiltersScreen(),
         ),

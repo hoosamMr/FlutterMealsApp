@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:meals/screens/tabs.dart';
-import 'package:meals/widgets/main_drawer.dart';
+//import 'package:meals/screens/tabs.dart';
+//import 'package:meals/widgets/main_drawer.dart';
 
 class FiltersScreen extends StatefulWidget {
   const FiltersScreen({super.key});
@@ -13,6 +13,10 @@ class FiltersScreen extends StatefulWidget {
 
 class _FiltersScreen extends State<FiltersScreen> {
   var _glutenFreeFilterSet = false;
+  var _lactoseFreeFilterdSet = false;
+  var _vagetarianFreeFilterdSet = false;
+  var _veganFreeFilterdSet = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,6 +55,30 @@ class _FiltersScreen extends State<FiltersScreen> {
           ),
           subtitle: Text(
             'Only include gluten-free meals.',
+            style: Theme.of(context)
+                .textTheme
+                .labelMedium!
+                .copyWith(color: Theme.of(context).colorScheme.onBackground),
+          ),
+          activeColor: Theme.of(context).colorScheme.tertiary,
+          contentPadding: const EdgeInsets.only(left: 34, right: 22),
+        ),
+         SwitchListTile(
+          value: _glutenFreeFilterSet,
+          onChanged: (isCheked) {
+            setState(() {
+              _glutenFreeFilterSet = isCheked;
+            });
+          },
+          title: Text(
+            'Lactose-free',
+            style: Theme.of(context)
+                .textTheme
+                .titleLarge!
+                .copyWith(color: Theme.of(context).colorScheme.onBackground),
+          ),
+          subtitle: Text(
+            'Only include lactose-free meals.',
             style: Theme.of(context)
                 .textTheme
                 .labelMedium!
