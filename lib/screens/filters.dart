@@ -2,14 +2,17 @@ import 'package:flutter/material.dart';
 //import 'package:meals/screens/tabs.dart';
 //import 'package:meals/widgets/main_drawer.dart';
 
-enum Filter{
+enum Filter {
   glutenFree,
   lactoseFree,
   vegetarian,
   vegan,
 }
+
 class FiltersScreen extends StatefulWidget {
-  const FiltersScreen({super.key});
+  const FiltersScreen({super.key, required this.currentFilter});
+
+  final Map<Filter, bool> currentFilter;
 
   @override
   State<FiltersScreen> createState() {
@@ -23,6 +26,14 @@ class _FiltersScreen extends State<FiltersScreen> {
   var _vagetarianFilterdSet = false;
   var _veganFilterdSet = false;
 
+  @override
+  void initState() {
+    super.initState();//174 applaying Filters
+    _glutenFreeFilterSet = widget.currentFilter[Filter.glutenFree]!;
+    _lactoseFreeFilterdSet = widget.currentFilter[Filter.lactoseFree]!;
+    _vagetarianFilterdSet = widget.currentFilter[Filter.vegetarian]!;
+    _veganFilterdSet =widget.currentFilter[Filter.vegan]!;
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,7 +56,7 @@ class _FiltersScreen extends State<FiltersScreen> {
       // ),
 
       body: WillPopScope(
-        onWillPop: () async { 
+        onWillPop: () async {
           Navigator.of(context).pop({
             Filter.glutenFree: _glutenFreeFilterSet,
             Filter.lactoseFree: _lactoseFreeFilterdSet,
@@ -53,9 +64,8 @@ class _FiltersScreen extends State<FiltersScreen> {
             Filter.vegan: _veganFilterdSet,
           });
           return false;
-         },
-        child: Column(
-          children: [
+        },
+        child: Column(children: [
           SwitchListTile(
             value: _glutenFreeFilterSet,
             onChanged: (isCheked) {
@@ -80,8 +90,7 @@ class _FiltersScreen extends State<FiltersScreen> {
             activeColor: Theme.of(context).colorScheme.tertiary,
             contentPadding: const EdgeInsets.only(left: 34, right: 22),
           ),
-        
-           SwitchListTile(
+          SwitchListTile(
             value: _lactoseFreeFilterdSet,
             onChanged: (isCheked) {
               setState(() {
