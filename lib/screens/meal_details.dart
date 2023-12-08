@@ -1,17 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:meals/models/meal.dart';
 
-class MealDetailsScreen extends StatelessWidget {
+/*-----necessary riverpod Notifire provider imports-----*/
+//step 1
+import '../providers/favorites_provider.dart'; //to set up the widget from state less to ConsumerWidget.
+import 'package:flutter_riverpod/flutter_riverpod.dart'; //to accses the notifier ref.
+
+/*------------------------------------------------------*/
+class MealDetailsScreen extends ConsumerWidget
+/*
+step 2:
+change the StatelessWidget to ConsumerWidget
+*/
+{
   const MealDetailsScreen({
     super.key,
     required this.meal,
-    required this.onToggleFavorite,
+    //required this.onToggleFavorite,
   });
 
   final Meal meal;
-  final void Function(Meal meal) onToggleFavorite;
+  //final void Function(Meal meal) onToggleFavorite;
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref)
+  /*
+  step 3:
+    add the (WidgetRef ref) argument.
+  */
+  {
     return Scaffold(
         appBar: AppBar(
             title: Text(
@@ -20,7 +36,20 @@ class MealDetailsScreen extends StatelessWidget {
             actions: [
               IconButton(
                 onPressed: () {
-                  onToggleFavorite(meal);
+                  //onToggleFavorite(meal);
+                  final wasAdded = ref.watch(favoritesMealsProvider);
+                  ref
+                      .read(favoritesMealsProvider.notifier)
+                      .toggleMealFavoriteStatus(meal);
+
+                  //now we can copy the message of ScaffoldMessenger from the tabs to here.
+
+                  ScaffoldMessenger.of(context).clearMaterialBanners();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text( wasAdded.contains(meal)? '${meal.title} removed from your favoritesMeals' : '${meal.title} added to your favoritesMeals'),
+                    ),
+                  );
                 },
                 icon: const Icon(Icons.star),
               )
