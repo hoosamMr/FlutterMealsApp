@@ -86,12 +86,11 @@ class _CategoriesScreenState extends State<CategoriesScreen>
           ],
         ),
         builder: (contex, child) => SlideTransition(
-              position: _animationController.drive(
-                Tween(
-                  begin: const Offset(-1, 0), //0 means no offset!. x,y axis
-                  end: const Offset(0, 0),
-                ),
-              ),
+              position: Tween(
+                begin: const Offset(-1, 0), //0 means no offset!. x,y axis
+                end: const Offset(0, 0),
+              ).animate(CurvedAnimation(
+                  parent: _animationController, curve: Curves.easeInOut)),
               child: child,
             )
         /*Padding(
