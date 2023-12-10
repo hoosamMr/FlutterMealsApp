@@ -11,8 +11,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/meal_provider.dart';
 /*------------------------------------------------------*/
 /*-----necessary riverpod Notifire provider imports-----*/
+//favorites_provider
+import '../providers/favorites_provider.dart';
 
-import'../providers/favorites_provider.dart';
+/*------------------------------------------------------*/
+
+/*-----necessary riverpod Notifire provider imports-----*/
+//filters_provider
+
+import '../providers/filters_provider.dart';
 
 /*------------------------------------------------------*/
 const KInitialFilters = {
@@ -34,7 +41,6 @@ class TabsScreen extends ConsumerStatefulWidget {
 class _TabsScreen extends ConsumerState<TabsScreen> {
   int _selectedPageIndex = 0;
   //final List<Meal> _favoriteMeals = [];
-  Map<Filter, bool> _selectedFilters = KInitialFilters;
 
   // the _showInfoMessage no longer nedded after handling the code with provider.
   // void _showInfoMessage(String message) {
@@ -95,20 +101,20 @@ class _TabsScreen extends ConsumerState<TabsScreen> {
   }
 
   void _setScreen(String identifier) async {
-    Navigator.of(context)
-        .pop(); //this line added here to clode the drawer after exiting the filterScreen, now you can delete the else statment.
+    Navigator.of(context).pop();
+    //this line added here to clode the drawer after exiting the filterScreen, now you can delete the else statment.
     if (identifier == 'filters') {
-      final result = await Navigator.of(context).push<Map<Filter, bool>>(
+      /*final result = */ await Navigator.of(context).push<Map<Filter, bool>>(
         //pushReplacement used to replace the screen in the widgets stuck instude of push widget over widget.
         MaterialPageRoute(
-          builder: (ctx) => FiltersScreen(
-            currentFilter: _selectedFilters,
-          ),
+          builder: (ctx) => const FiltersScreen(
+              //currentFilter: _selectedFilters,//we don't need it after seting the provider
+              ),
         ),
       );
-      setState(() {
-        _selectedFilters = result ?? KInitialFilters;
-      });
+      // setState(() {
+      //   _selectedFilters = result ?? KInitialFilters;
+      // });
     } /*else {
       Navigator.of(context).pop();
     }*/
@@ -117,17 +123,18 @@ class _TabsScreen extends ConsumerState<TabsScreen> {
   @override
   Widget build(BuildContext context) {
     final meals = ref.watch(mealsProvider);
+    final activeFilters = ref.watch(filtersProvider);
     final availableMeals = meals.where((meal) {
-      if (_selectedFilters[Filter.glutenFree]! && !meal.isGlutenFree) {
+      if (activeFilters[Filter.glutenFree]! && !meal.isGlutenFree) {
         return false;
       }
-      if (_selectedFilters[Filter.lactoseFree]! && !meal.isLactoseFree) {
+      if (activeFilters[Filter.lactoseFree]! && !meal.isLactoseFree) {
         return false;
       }
-      if (_selectedFilters[Filter.vegetarian]! && !meal.isVegetarian) {
+      if (activeFilters[Filter.vegetarian]! && !meal.isVegetarian) {
         return false;
       }
-      if (_selectedFilters[Filter.vegan]! && !meal.isVegan) {
+      if (activeFilters[Filter.vegan]! && !meal.isVegan) {
         return false;
       }
       return true;
@@ -150,13 +157,14 @@ class _TabsScreen extends ConsumerState<TabsScreen> {
       //   return true;
     }).toList();
     Widget activeScreen = CategoriesScreen(
-     // onToggleFavorite: _toggleMealFavoriteStatus,
+      // onToggleFavorite: _toggleMealFavoriteStatus,
       availableMeals: availableMeals,
     );
     var activePageTitle = 'Categories';
 
     if (_selectedPageIndex == 1) {
-      final favoriteMeals = ref.watch(favoritesMealsProvider);//here we using the Notifire provider.
+      final favoriteMeals = ref
+          .watch(favoritesMealsProvider); //here we using the Notifire provider.
       activeScreen = MealsScreen(
         meals: favoriteMeals,
         //onToggleFavorite: _toggleMealFavoriteStatus,

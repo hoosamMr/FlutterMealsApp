@@ -2,25 +2,23 @@ import 'package:flutter/material.dart';
 //import 'package:meals/screens/tabs.dart';
 //import 'package:meals/widgets/main_drawer.dart';
 
-enum Filter {
-  glutenFree,
-  lactoseFree,
-  vegetarian,
-  vegan,
-}
+/*-----necessary riverpod Notifire provider imports-----*/
+//filters_provider
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../providers/filters_provider.dart';
 
-class FiltersScreen extends StatefulWidget {
-  const FiltersScreen({super.key, required this.currentFilter});
+/*------------------------------------------------------*/
 
-  final Map<Filter, bool> currentFilter;
+class FiltersScreen extends ConsumerStatefulWidget {
+  const FiltersScreen({super.key});
 
   @override
-  State<FiltersScreen> createState() {
+  ConsumerState<FiltersScreen> createState() {
     return _FiltersScreen();
   }
 }
 
-class _FiltersScreen extends State<FiltersScreen> {
+class _FiltersScreen extends ConsumerState<FiltersScreen> {
   var _glutenFreeFilterSet = false;
   var _lactoseFreeFilterdSet = false;
   var _vagetarianFilterdSet = false;
@@ -28,12 +26,14 @@ class _FiltersScreen extends State<FiltersScreen> {
 
   @override
   void initState() {
-    super.initState();//174 applaying Filters
-    _glutenFreeFilterSet = widget.currentFilter[Filter.glutenFree]!;
-    _lactoseFreeFilterdSet = widget.currentFilter[Filter.lactoseFree]!;
-    _vagetarianFilterdSet = widget.currentFilter[Filter.vegetarian]!;
-    _veganFilterdSet =widget.currentFilter[Filter.vegan]!;
+    super.initState(); //174 applaying Filters
+    final activeFilters = ref.read(filtersProvider);
+    _glutenFreeFilterSet = activeFilters[Filter.glutenFree]!;
+    _lactoseFreeFilterdSet = activeFilters[Filter.lactoseFree]!;
+    _vagetarianFilterdSet = activeFilters[Filter.vegetarian]!;
+    _veganFilterdSet = activeFilters[Filter.vegan]!;
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,13 +57,16 @@ class _FiltersScreen extends State<FiltersScreen> {
 
       body: WillPopScope(
         onWillPop: () async {
-          Navigator.of(context).pop({
-            Filter.glutenFree: _glutenFreeFilterSet,
-            Filter.lactoseFree: _lactoseFreeFilterdSet,
-            Filter.vegetarian: _veganFilterdSet,
-            Filter.vegan: _veganFilterdSet,
-          });
-          return false;
+          ref.read(filtersProvider.notifier).setFilters(
+            {
+              Filter.glutenFree: _glutenFreeFilterSet,
+              Filter.lactoseFree: _lactoseFreeFilterdSet,
+              Filter.vegetarian: _veganFilterdSet,
+              Filter.vegan: _veganFilterdSet,
+            },
+          );
+          //Navigator.of(context).pop();//with the provider we don't need to call the pop function manually
+          return true;
         },
         child: Column(children: [
           SwitchListTile(
