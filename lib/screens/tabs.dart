@@ -124,6 +124,8 @@ class _TabsScreen extends ConsumerState<TabsScreen> {
   Widget build(BuildContext context) {
    
     final availableMeals = ref.watch(filteredMealsProvider);
+    final favoriteMeals = ref
+          .watch(favoritesMealsProvider); //here we using the Notifire provider.
     Widget activeScreen = CategoriesScreen(
       // onToggleFavorite: _toggleMealFavoriteStatus,
       availableMeals: availableMeals,
@@ -131,8 +133,7 @@ class _TabsScreen extends ConsumerState<TabsScreen> {
     var activePageTitle = 'Categories';
 
     if (_selectedPageIndex == 1) {
-      final favoriteMeals = ref
-          .watch(favoritesMealsProvider); //here we using the Notifire provider.
+      
       activeScreen = MealsScreen(
         meals: favoriteMeals,
         //onToggleFavorite: _toggleMealFavoriteStatus,
@@ -151,8 +152,8 @@ class _TabsScreen extends ConsumerState<TabsScreen> {
         onTap: _selectedPage,
         currentIndex:
             _selectedPageIndex, //this coe to highLight the selected icon.
-        items: const [
-          BottomNavigationBarItem(
+        items:  [
+          const BottomNavigationBarItem(
             icon: Icon(
               Icons.set_meal,
             ),
@@ -160,7 +161,8 @@ class _TabsScreen extends ConsumerState<TabsScreen> {
           ),
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.star,
+              //Icons.star,
+              favoriteMeals.isNotEmpty ?  Icons.star: Icons.star_border,
             ),
             label: 'Favorites',
           ),
