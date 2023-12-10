@@ -8,7 +8,7 @@ import 'package:meals/widgets/main_drawer.dart';
 /*-------necessary riverpod provider imports------------*/
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../providers/meal_provider.dart';
+//import '../providers/meal_provider.dart';//remodev after connect meal and filters providers.
 /*------------------------------------------------------*/
 /*-----necessary riverpod Notifire provider imports-----*/
 //favorites_provider
@@ -122,40 +122,8 @@ class _TabsScreen extends ConsumerState<TabsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final meals = ref.watch(mealsProvider);
-    final activeFilters = ref.watch(filtersProvider);
-    final availableMeals = meals.where((meal) {
-      if (activeFilters[Filter.glutenFree]! && !meal.isGlutenFree) {
-        return false;
-      }
-      if (activeFilters[Filter.lactoseFree]! && !meal.isLactoseFree) {
-        return false;
-      }
-      if (activeFilters[Filter.vegetarian]! && !meal.isVegetarian) {
-        return false;
-      }
-      if (activeFilters[Filter.vegan]! && !meal.isVegan) {
-        return false;
-      }
-      return true;
-
-      /*before adding the provider.*/
-      // final availableMeals = dummyMeals.where((meal){
-
-      //   if(_selectedFilters[Filter.glutenFree]! && !meal.isGlutenFree){
-      //     return false;
-      //   }
-      //   if(_selectedFilters[Filter.lactoseFree]! && !meal.isLactoseFree){
-      //     return false;
-      //   }
-      //   if(_selectedFilters[Filter.vegetarian]! && !meal.isVegetarian){
-      //     return false;
-      //   }
-      //   if(_selectedFilters[Filter.vegan]! && !meal.isVegan){
-      //     return false;
-      //   }
-      //   return true;
-    }).toList();
+   
+    final availableMeals = ref.watch(filteredMealsProvider);
     Widget activeScreen = CategoriesScreen(
       // onToggleFavorite: _toggleMealFavoriteStatus,
       availableMeals: availableMeals,

@@ -28,6 +28,7 @@ change the StatelessWidget to ConsumerWidget
     add the (WidgetRef ref) argument.
   */
   {
+    final isFavorite = ref.watch(favoritesMealsProvider).contains(meal);
     return Scaffold(
         appBar: AppBar(
             title: Text(
@@ -37,7 +38,7 @@ change the StatelessWidget to ConsumerWidget
               IconButton(
                 onPressed: () {
                   //onToggleFavorite(meal);
-                  final wasAdded = ref.watch(favoritesMealsProvider);
+                  //final wasAdded = ref.watch(favoritesMealsProvider);
                   ref
                       .read(favoritesMealsProvider.notifier)
                       .toggleMealFavoriteStatus(meal);
@@ -47,11 +48,11 @@ change the StatelessWidget to ConsumerWidget
                   ScaffoldMessenger.of(context).clearMaterialBanners();
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text( wasAdded.contains(meal)? '${meal.title} removed from your favoritesMeals' : '${meal.title} added to your favoritesMeals'),
+                      content: Text( isFavorite? '${meal.title} removed from your favoritesMeals' : '${meal.title} added to your favoritesMeals'),
                     ),
                   );
                 },
-                icon: const Icon(Icons.star),
+                icon:  Icon(isFavorite ? Icons.star: Icons.star_border),
               )
             ]),
         body: SingleChildScrollView(
