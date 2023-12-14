@@ -36,24 +36,38 @@ change the StatelessWidget to ConsumerWidget
             ),
             actions: [
               IconButton(
-                onPressed: () {
-                  //onToggleFavorite(meal);
-                  //final wasAdded = ref.watch(favoritesMealsProvider);
-                  ref
-                      .read(favoritesMealsProvider.notifier)
-                      .toggleMealFavoriteStatus(meal);
+                  onPressed: () {
+                    //onToggleFavorite(meal);
+                    final wasAdded =
+                        ref.watch(favoritesMealsProvider).contains(meal);
+                    ref
+                        .read(favoritesMealsProvider.notifier)
+                        .toggleMealFavoriteStatus(meal);
 
-                  //now we can copy the message of ScaffoldMessenger from the tabs to here.
+                    //now we can copy the message of ScaffoldMessenger from the tabs to here.
 
-                  ScaffoldMessenger.of(context).clearMaterialBanners();
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text( isFavorite? '${meal.title} removed from your favoritesMeals' : '${meal.title} added to your favoritesMeals'),
+                    ScaffoldMessenger.of(context).clearMaterialBanners();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(wasAdded
+                            ? '${meal.title} removed from your favoritesMeals'
+                            : '${meal.title} added to your favoritesMeals'),
+                      ),
+                    );
+                  },
+                  icon: AnimatedSwitcher(
+                    duration: const Duration(seconds: 1),
+                    transitionBuilder: (child, animation) {
+                      return RotationTransition(
+                        turns:/*anumation*/ Tween<double>(begin: 0.5,end: 1).animate(animation),
+                        child: child,
+                      );
+                    },
+                    child: Icon(
+                      isFavorite ? Icons.star : Icons.star_border,
+                      key: ValueKey(isFavorite),
                     ),
-                  );
-                },
-                icon:  Icon(isFavorite ? Icons.star: Icons.star_border),
-              )
+                  ))
             ]),
         body: SingleChildScrollView(
           child: Column(
