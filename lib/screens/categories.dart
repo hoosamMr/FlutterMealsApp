@@ -71,7 +71,7 @@ class _CategoriesScreenState extends State<CategoriesScreen>
           padding: const EdgeInsets.all(24),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
-            childAspectRatio: 3 / 2,
+            childAspectRatio: 2 / 2,
             crossAxisSpacing: 20,
             mainAxisSpacing: 20,
           ),
@@ -87,10 +87,14 @@ class _CategoriesScreenState extends State<CategoriesScreen>
         ),
         builder: (contex, child) => SlideTransition(
               position: Tween(
-                begin: const Offset(-1, 0), //0 means no offset!. x,y axis
+                begin: const Offset(1, 0), //0 means no offset!. x,y axis
                 end: const Offset(0, 0),
-              ).animate(CurvedAnimation(
-                  parent: _animationController, curve: Curves.easeInOut)),
+              ).animate(
+                CurvedAnimation(
+                  parent: _animationController,
+                  curve: Curves.easeInOut,
+                ),
+              ),
               child: child,
             )
         /*Padding(

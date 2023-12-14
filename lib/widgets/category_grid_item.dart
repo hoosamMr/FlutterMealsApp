@@ -14,7 +14,7 @@ class CategoryGridItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     
-    BorderRadius br = BorderRadius.circular(16);
+    BorderRadius br = BorderRadius.circular(3000);
     return InkWell(
       
       onTap: onSelectCategory,
