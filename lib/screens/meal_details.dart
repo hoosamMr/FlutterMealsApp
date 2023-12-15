@@ -38,8 +38,8 @@ change the StatelessWidget to ConsumerWidget
               IconButton(
                   onPressed: () {
                     //onToggleFavorite(meal);
-                    final wasAdded =
-                        ref.watch(favoritesMealsProvider).contains(meal);
+                    //final wasAdded =
+                    ref.watch(favoritesMealsProvider).contains(meal);
                     ref
                         .read(favoritesMealsProvider.notifier)
                         .toggleMealFavoriteStatus(meal);
@@ -49,17 +49,20 @@ change the StatelessWidget to ConsumerWidget
                     ScaffoldMessenger.of(context).clearMaterialBanners();
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text(wasAdded
-                            ? '${meal.title} removed from your favoritesMeals'
-                            : '${meal.title} added to your favoritesMeals'),
+                        content: Text(
+                          isFavorite
+                              ? '${meal.title} removed from your favoritesMeals'
+                              : '${meal.title} added to your favoritesMeals',
+                        ),
                       ),
                     );
                   },
                   icon: AnimatedSwitcher(
-                    duration: const Duration(seconds: 1),
+                    duration: const Duration(milliseconds: 300),
                     transitionBuilder: (child, animation) {
                       return RotationTransition(
-                        turns:/*anumation*/ Tween<double>(begin: 0.5,end: 1).animate(animation),
+                        turns: /*anumation*/ Tween<double>(begin: 0.5, end: 1)
+                            .animate(animation),
                         child: child,
                       );
                     },
@@ -72,11 +75,14 @@ change the StatelessWidget to ConsumerWidget
         body: SingleChildScrollView(
           child: Column(
             children: [
-              Image.network(
-                meal.imageUrl,
-                height: 300,
-                width: double.infinity,
-                fit: BoxFit.cover,
+              Hero(
+                tag: meal.id,
+                child: Image.network(
+                  meal.imageUrl,
+                  height: 300,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                ),
               ),
               const SizedBox(
                 height: 14,
